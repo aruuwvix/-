@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Где я? — Географическая викторина</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: auto; background: #f9fbff; }
+        h1 { text-align: center; color: #2a5d84; }
+        .question { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; background: #ffffff; border-radius: 10px; }
+        .question h2 { font-size: 18px; }
+        .options input { margin-right: 10px; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; background: #2a5d84; color: white; border: none; border-radius: 5px; }
+        #result { margin-top: 20px; font-size: 20px; font-weight: bold; color: green; text-align: center; }
+        #timer { font-size: 18px; color: red; text-align: center; margin-bottom: 20px; }
+        img { max-width: 100%; border-radius: 8px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Где я?</h1>
+    <div id="timer">Время: 60 секунд</div>
+    <form id="quizForm">
+
+        <div class="question">
+            <h2>1. Я вижу кенгуру, коралловый риф и оперный театр в Сиднее. Где я?</h2>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Sydney_Opera_House_Sails.jpg/640px-Sydney_Opera_House_Sails.jpg" alt="Сидней">
+            <div class="options">
+                <label><input type="radio" name="q1" value="0">Канада</label><br>
+                <label><input type="radio" name="q1" value="0">Франция</label><br>
+                <label><input type="radio" name="q1" value="1">Австралия</label><br>
+                <label><input type="radio" name="q1" value="0">Бразилия</label>
+            </div>
+        </div>
+
+        <!-- Чтобы не перегружать здесь, остальные 9 вопросов будут такими же по структуре, можно вставить позже -->
+
+        <button type="button" onclick="checkAnswers()">Проверить</button>
+        <div id="result"></div>
+        <audio id="correctSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+        <audio id="failSound" src="https://www.soundjay.com/button/beep-05.wav" preload="auto"></audio>
+    </form>
+
+    <script>
+        let timer = 60;
+        const timerDiv = document.getElementById('timer');
+        const interval = setInterval(() => {
+            timer--;
+            timerDiv.textContent = "Время: " + timer + " секунд";
+            if (timer === 0) {
+                clearInterval(interval);
+                checkAnswers();
+            }
+        }, 1000);
+
+        function checkAnswers() {
+            clearInterval(interval);
+            const form = document.getElementById('quizForm');
+            const data = new FormData(form);
+            let score = 0;
+            for (let value of data.values()) {
+                score += parseInt(value);
+            }
+            const result = document.getElementById('result');
+            result.textContent = "Ваш результат: " + score + " из 1";
+            const sound = document.getElementById(score > 0 ? 'correctSound' : 'failSound');
+            sound.play();
+        }
+    </script>
+</body>
+</html>
